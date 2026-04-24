@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOUR DE CONTRÔLE - Pâtisserie & Formation</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --saumon: #ff9b8a; --saumon-light: #ffd1c7; --saumon-dark: #e88372;
+            --cream: #fdfbf7; --chocolate: #3e2723; --white: #ffffff;
+            --gray-50: #f9fafb; --gray-100: #f3f4f6; --gray-200: #e5e7eb; --gray-300: #d1d5db;
+            --gray-400: #9ca3af; --gray-500: #6b7280; --gray-600: #4b5563; --gray-700: #374151;
+            --gray-800: #1f2937; --gray-900: #111827;
+            --green-500: #22c55e; --green-600: #16a34a; --green-100: #d1fae5; --green-700: #065f46;
+            --red-500: #ef4444; --red-100: #fee2e2; --red-700: #991b1b;
+            --yellow-500: #eab308; --yellow-100: #fef3c7; --yellow-700: #92400e;
+            --blue-500: #3b82f6; --blue-100: #dbeafe; --blue-700: #1e40af;
+            --tiktok: #000000; --tiktok-light: #ff0050;
+            --facebook: #1877f2;
+        }
+        body { font-family: 'Poppins', sans-serif; color: var(--gray-800); background-color: var(--white); line-height: 1.6; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Playfair Display', serif; color: var(--chocolate); }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
+
+        /* Animations */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideInLeft { from { opacity: 0; transform: translateX(-50px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes bounceIn { 0% { opacity: 0; transform: scale(0.3); } 50% { opacity: 1; transform: scale(1.05); } 70% { transform: scale(0.9); } 100% { opacity: 1; transform: scale(1); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Top Bar */
+        .top-bar { background: var(--white); border-bottom: 1px solid var(--gray-100); padding: 0.75rem 0; }
+        .top-bar-content { display: flex; justify-content: space-between; align-items: center; }
+        .brand-name { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 600; color: var(--chocolate); letter-spacing: 1px; }
+        .brand-name span { color: var(--saumon); }
+        .top-bar-tagline { color: var(--gray-500); font-size: 0.9rem; font-style: italic; }
+
+        /* Header */
+        .header { background: var(--white); padding: 0.75rem 0; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.05); transition: box-shadow 0.3s; }
+        .header.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.1); }
+        .header-content { display: flex; align-items: center; justify-content: space-between; gap: 2rem; }
+        .logo-container { display: flex; align-items: center; text-decoration: none; flex-shrink: 0; }
+        .logo-image { height: 50px; width: auto; object-fit: contain; transition: transform 0.3s; border-radius: 8px; }
+        .logo-image:hover { transform: scale(1.05); }
+        .logo-text { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: bold; color: var(--chocolate); margin-left: 0.5rem; white-space: nowrap; }
+        .logo-text span { color: var(--saumon); }
+        .nav-desktop { display: flex; gap: 1.5rem; align-items: center; margin: 0 auto; }
+        .nav-link { color: var(--gray-700); text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: color 0.3s; position: relative; white-space: nowrap; padding: 0.25rem 0; }
+        .nav-link:hover, .nav-link.active { color: var(--saumon); }
+        .nav-link::after { content: ''; position: absolute; bottom: -3px; left: 0; width: 0; height: 2px; background: var(--saumon); transition: width 0.3s; }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+        .header-actions { display: flex; align-items: center; gap: 0.75rem; flex-shrink: 0; }
+        .lang-selector { display: flex; gap: 0.35rem; }
+        .lang-btn { padding: 0.35rem 0.65rem; border: 1px solid var(--gray-300); background: transparent; color: var(--gray-600); border-radius: 4px; cursor: pointer; font-weight: 500; font-size: 0.8rem; transition: all 0.3s; white-space: nowrap; }
+        .lang-btn:hover, .lang-btn.active { background: var(--saumon); color: var(--white); border-color: var(--saumon); }
+        .mobile-menu-btn { display: none; background: transparent; border: none; cursor: pointer; padding: 0.5rem; font-size: 1.3rem; color: var(--chocolate); flex-shrink: 0; }
+        .mobile-menu { display: none; background: var(--white); border-top: 1px solid var(--gray-200); padding: 1rem 0; position: absolute; top: 100%; left: 0; right: 0; z-index: 999; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .mobile-menu.active { display: block; animation: slideDown 0.3s ease-out; }
+        .mobile-nav { display: flex; flex-direction: column; gap: 0.25rem; }
+        .mobile-nav-link { padding: 0.75rem 1.5rem; color: var(--gray-700); text-decoration: none; font-weight: 500; transition: all 0.3s; border-radius: 8px; margin: 0 0.5rem; }
+        .mobile-nav-link:hover, .mobile-nav-link.active { background: var(--saumon-light); color: var(--saumon-dark); }
+        .mobile-lang-selector { display: flex; gap: 0.5rem; padding: 1rem 1.5rem; border-top: 1px solid var(--gray-200); margin-top: 0.5rem; }
+        .mobile-lang-btn { flex: 1; padding: 0.5rem; border: 1px solid var(--gray-300); background: transparent; color: var(--gray-600); border-radius: 4px; cursor: pointer; font-weight: 500; font-size: 0.85rem; transition: all 0.3s; text-align: center; }
+        .mobile-lang-btn:hover, .mobile-lang-btn.active { background: var(--saumon); color: var(--white); border-color: var(--saumon); }
+
+        /* Buttons */
+        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.9rem 2rem; border-radius: 50px; font-weight: 500; text-decoration: none; transition: all 0.3s; cursor: pointer; border: none; font-size: 1rem; gap: 0.5rem; }
+        .btn-primary { background: var(--saumon); color: var(--white); box-shadow: 0 10px 20px rgba(255,155,138,0.3); }
+        .btn-primary:hover { background: var(--saumon-dark); transform: translateY(-2px); box-shadow: 0 15px 30px rgba(255,155,138,0.4); }
+        .btn-secondary { background: transparent; color: var(--chocolate); border: 2px solid var(--saumon); }
+        .btn-secondary:hover { background: var(--saumon); color: var(--white); transform: translateY(-2px); }
+        .btn-whatsapp { background: var(--green-500); color: var(--white); box-shadow: 0 10px 20px rgba(34,197,94,0.3); }
+        .btn-whatsapp:hover { background: var(--green-600); transform: translateY(-2px); }
+        .btn-outline-light { background: transparent; color: var(--white); border: 2px solid var(--white); }
+        .btn-outline-light:hover { background: var(--white); color: var(--chocolate); transform: translateY(-2px); }
+        .btn-white { background: var(--white); color: var(--chocolate); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .btn-white:hover { background: var(--saumon); color: var(--white); transform: translateY(-2px); }
+        .btn-sm { padding: 0.5rem 1rem; font-size: 0.875rem; }
+        .btn-danger { background: var(--red-500); color: var(--white); }
+        .btn-danger:hover { background: #dc2626; }
+
+        /* Page Header */
+        .page-header { background: linear-gradient(135deg, var(--saumon-light) 0%, var(--cream) 100%); padding: 4rem 0; text-align: center; position: relative; overflow: hidden; }
+        .page-header::before { content: ''; position: absolute; top: -50%; right: -20%; width: 80%; height: 200%; background: radial-gradient(circle, rgba(255,155,138,0.1) 0%, transparent 70%); border-radius: 50%; }
+        .page-title { font-size: 3.5rem; margin-bottom: 1rem; position: relative; z-index: 2; animation: fadeInUp 0.8s ease-out; }
+        .page-subtitle { font-size: 1.2rem; color: var(--gray-600); max-width: 700px; margin: 0 auto; position: relative; z-index: 2; animation: fadeInUp 0.8s ease-out 0.2s forwards; opacity: 0; }
+
+        /* Hero */
+        .hero { min-height: calc(100vh - 200px); display: flex; align-items: center; padding: 3rem 0 5rem; background: linear-gradient(135deg, #fff5f3 0%, var(--white) 100%); position: relative; overflow: hidden; }
+        .hero::before { content: ''; position: absolute; top: -50%; right: -20%; width: 80%; height: 200%; background: radial-gradient(circle, rgba(255,155,138,0.08) 0%, transparent 70%); border-radius: 50%; }
+        .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; position: relative; z-index: 2; }
+        .hero-badge { display: inline-block; background: var(--saumon-light); color: var(--saumon-dark); padding: 0.5rem 1.5rem; border-radius: 50px; font-size: 0.9rem; font-weight: 500; margin-bottom: 1.5rem; opacity: 0; animation: fadeInUp 0.6s ease-out forwards; }
+        .hero-title { font-size: 4rem; font-weight: 700; line-height: 1.2; margin-bottom: 1.5rem; opacity: 0; animation: fadeInUp 0.8s ease-out 0.2s forwards; }
+        .hero-title-line1 { color: var(--chocolate); display: block; font-size: 1.2rem; font-weight: 400; letter-spacing: 3px; margin-bottom: 0.5rem; }
+        .hero-title-line2 { color: var(--chocolate); display: block; font-size: 3.5rem; }
+        .hero-title-line2 span { color: var(--saumon); }
+        .hero-description { font-size: 1.1rem; color: var(--gray-600); max-width: 550px; margin-bottom: 2.5rem; line-height: 1.8; opacity: 0; animation: fadeInUp 0.8s ease-out 0.4s forwards; }
+        .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; opacity: 0; animation: fadeInUp 0.8s ease-out 0.6s forwards; }
+        .hero-image { position: relative; opacity: 0; animation: scaleIn 1s ease-out 0.3s forwards; }
+        .hero-image img { width: 100%; border-radius: 30px; box-shadow: 0 30px 60px rgba(0,0,0,0.1); }
+        .floating-element { position: absolute; width: 70px; height: 70px; background: var(--white); border-radius: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 20px 40px rgba(0,0,0,0.1); animation: float 4s ease-in-out infinite; font-size: 2rem; }
+        .floating-1 { top: 10%; right: -20px; animation-delay: 0s; }
+        .floating-2 { bottom: 20%; left: -30px; animation-delay: 1s; }
+        .floating-3 { bottom: 40%; right: -10px; width: 55px; height: 55px; animation-delay: 2s; font-size: 1.5rem; }
+
+        /* Section Titles */
+        .section-title { font-size: 2.5rem; text-align: center; margin-bottom: 1rem; }
+        .section-subtitle { text-align: center; color: var(--gray-600); max-width: 600px; margin: 0 auto 3rem; }
+
+        /* Products */
+        .products-section { padding: 5rem 0; background: var(--white); }
+        .category-filter { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin-bottom: 3rem; }
+        .category-btn { padding: 0.6rem 1.5rem; background: var(--white); border: 1px solid var(--gray-300); border-radius: 50px; font-weight: 500; color: var(--gray-600); cursor: pointer; transition: all 0.3s; }
+        .category-btn:hover, .category-btn.active { background: var(--saumon); color: var(--white); border-color: var(--saumon); }
+        .products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+        .product-card { background: var(--white); border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: all 0.3s; }
+        .product-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .product-image { position: relative; overflow: hidden; height: 250px; cursor: pointer; }
+        .product-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .product-card:hover .product-image img { transform: scale(1.1); }
+        .product-category { position: absolute; top: 1rem; left: 1rem; background: var(--saumon); color: var(--white); padding: 0.25rem 1rem; border-radius: 50px; font-size: 0.8rem; font-weight: 500; }
+        .product-content { padding: 1.5rem; }
+        .product-title { font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .product-price { color: var(--saumon-dark); font-weight: bold; font-size: 1.3rem; margin-bottom: 1rem; }
+        .product-actions { display: flex; gap: 0.5rem; }
+        .product-actions .btn { flex: 1; padding: 0.6rem; font-size: 0.9rem; }
+
+        /* Training, Delivery, Blog, Contact - styles inchangés mais présents dans le code complet */
+        .training-section { padding: 5rem 0; background: var(--cream); }
+        .training-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+        .training-card { background: var(--white); border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: all 0.3s; }
+        .training-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .training-image { height: 250px; }
+        .training-image img { width: 100%; height: 100%; object-fit: cover; }
+        .training-content { padding: 2rem; }
+        .training-title { font-size: 1.5rem; margin-bottom: 1rem; }
+        .training-details { list-style: none; margin: 1.5rem 0; }
+        .training-details li { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; color: var(--gray-600); }
+        .training-details i { color: var(--saumon); width: 20px; }
+        .training-price { font-size: 1.8rem; color: var(--saumon-dark); font-weight: bold; margin-bottom: 1.5rem; }
+
+        .delivery-section { padding: 2rem 0 5rem; background: var(--white); }
+        .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-bottom: 4rem; }
+        .service-card { background: var(--white); border-radius: 30px; padding: 2.5rem 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.05); transition: all 0.4s; text-align: center; position: relative; overflow: hidden; border: 1px solid rgba(255,155,138,0.1); animation: fadeInUp 0.6s ease-out forwards; opacity: 0; }
+        .service-card:nth-child(1) { animation-delay: 0.1s; } .service-card:nth-child(2) { animation-delay: 0.3s; } .service-card:nth-child(3) { animation-delay: 0.5s; }
+        .service-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px; background: linear-gradient(90deg, var(--saumon), var(--saumon-dark)); transform: scaleX(0); transition: transform 0.4s ease; }
+        .service-card:hover { transform: translateY(-15px); box-shadow: 0 30px 60px rgba(255,155,138,0.15); border-color: var(--saumon-light); }
+        .service-card:hover::before { transform: scaleX(1); }
+        .service-icon { width: 90px; height: 90px; background: linear-gradient(135deg, var(--saumon-light), #ffe8e3); border-radius: 30px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; transition: all 0.3s ease; box-shadow: 0 10px 20px rgba(255,155,138,0.2); }
+        .service-card:hover .service-icon { transform: scale(1.1) rotate(5deg); background: linear-gradient(135deg, var(--saumon), var(--saumon-light)); }
+        .service-icon i { font-size: 2.8rem; color: var(--saumon-dark); transition: all 0.3s ease; }
+        .service-card:hover .service-icon i { color: var(--white); animation: float 1s ease-in-out; }
+        .service-title { font-size: 1.8rem; margin-bottom: 1rem; color: var(--chocolate); }
+        .service-description { color: var(--gray-600); margin-bottom: 1.5rem; line-height: 1.7; }
+        .service-price { font-size: 1.1rem; color: var(--gray-500); margin-bottom: 0.5rem; }
+        .service-price strong { font-size: 2rem; color: var(--saumon-dark); display: block; margin-top: 0.5rem; }
+        .service-badge { position: absolute; top: 1.5rem; right: 1.5rem; background: var(--saumon); color: var(--white); padding: 0.4rem 1.2rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600; box-shadow: 0 5px 15px rgba(255,155,138,0.3); }
+        .service-feature { color: var(--saumon); font-weight: 500; margin-top: 0.5rem; }
+        .service-feature i { margin-right: 0.5rem; }
+        .delivery-zones { background: linear-gradient(135deg, var(--cream) 0%, var(--white) 100%); border-radius: 40px; padding: 3.5rem; margin-bottom: 4rem; box-shadow: 0 20px 40px rgba(0,0,0,0.03); border: 1px solid var(--saumon-light); animation: scaleIn 0.8s ease-out 0.6s forwards; opacity: 0; }
+        .zones-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 2.5rem; }
+        .zones-header i { font-size: 2.5rem; color: var(--saumon); background: var(--white); padding: 1rem; border-radius: 20px; box-shadow: 0 10px 20px rgba(255,155,138,0.15); }
+        .zones-header h3 { font-size: 2rem; color: var(--chocolate); }
+        .zones-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; }
+        .zone-item { background: var(--white); padding: 1.2rem 1.5rem; border-radius: 20px; display: flex; align-items: center; gap: 0.75rem; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.03); border: 1px solid transparent; }
+        .zone-item:hover { transform: translateX(8px); border-color: var(--saumon); box-shadow: 0 10px 25px rgba(255,155,138,0.15); background: var(--saumon-light); }
+        .zone-item i { color: var(--saumon); font-size: 1.2rem; }
+        .delivery-info-banner { background: linear-gradient(135deg, var(--saumon) 0%, var(--saumon-dark) 100%); border-radius: 30px; padding: 2.5rem 3rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 2rem; box-shadow: 0 20px 40px rgba(255,155,138,0.3); animation: slideInLeft 0.8s ease-out 0.8s forwards; opacity: 0; margin-bottom: 4rem; }
+        .info-content { display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+        .info-icon { width: 70px; height: 70px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        .info-icon i { font-size: 2rem; color: var(--white); }
+        .info-text { color: var(--white); }
+        .info-text h4 { color: var(--white); font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .how-it-works { margin-top: 2rem; text-align: center; }
+        .how-it-works h3 { font-size: 2.2rem; margin-bottom: 3rem; position: relative; display: inline-block; }
+        .how-it-works h3::after { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 80px; height: 3px; background: var(--saumon); border-radius: 3px; }
+        .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+        .step-card { padding: 2rem; animation: fadeInUp 0.6s ease-out forwards; opacity: 0; }
+        .step-card:nth-child(1) { animation-delay: 1s; } .step-card:nth-child(2) { animation-delay: 1.2s; } .step-card:nth-child(3) { animation-delay: 1.4s; }
+        .step-number { width: 60px; height: 60px; background: var(--saumon-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; font-size: 1.5rem; font-weight: bold; color: var(--saumon-dark); border: 3px solid var(--saumon); }
+        .delivery-cta { margin-top: 5rem; text-align: center; padding: 4rem; background: linear-gradient(135deg, var(--chocolate) 0%, #2a1a15 100%); border-radius: 40px; color: var(--white); animation: scaleIn 0.8s ease-out 1.6s forwards; opacity: 0; }
+        .delivery-cta h3 { color: var(--white); font-size: 2.5rem; margin-bottom: 1rem; }
+        .cta-buttons { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
+
+        .blog-section { padding: 5rem 0; background: var(--white); }
+        .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+        .blog-card { background: var(--white); border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: all 0.3s; }
+        .blog-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .blog-image { height: 200px; }
+        .blog-image img { width: 100%; height: 100%; object-fit: cover; }
+        .blog-content { padding: 1.5rem; }
+        .blog-meta { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; font-size: 0.85rem; color: var(--gray-500); }
+        .blog-author { display: flex; align-items: center; gap: 0.5rem; }
+        .blog-author i { color: var(--saumon); }
+        .blog-title { font-size: 1.3rem; margin-bottom: 0.75rem; line-height: 1.4; }
+        .blog-excerpt { color: var(--gray-600); margin-bottom: 1rem; font-size: 0.95rem; }
+        .blog-link { color: var(--saumon); text-decoration: none; font-weight: 500; display: inline-flex; align-items: center; gap: 0.5rem; transition: gap 0.3s; }
+        .blog-link:hover { gap: 0.75rem; }
+
+        .contact-section { padding: 5rem 0; background: var(--cream); }
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+        .contact-form { background: var(--white); padding: 2.5rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--gray-700); }
+        .form-input, .form-select, .form-textarea { width: 100%; padding: 0.9rem 1rem; border: 1px solid var(--gray-300); border-radius: 10px; font-family: 'Poppins', sans-serif; transition: all 0.3s; }
+        .form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--saumon); box-shadow: 0 0 0 3px rgba(255,155,138,0.2); }
+        .form-textarea { resize: vertical; min-height: 120px; }
+        .contact-info { background: var(--white); padding: 2.5rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .info-item { display: flex; gap: 1rem; margin-bottom: 1.5rem; }
+        .info-item i { color: var(--saumon); font-size: 1.2rem; margin-top: 0.25rem; }
+        .map-container { margin-top: 2rem; border-radius: 15px; overflow: hidden; }
+        .map-container iframe { width: 100%; height: 250px; border: 0; }
+
+        /* Social Floating Buttons */
+        .social-float-container { position: fixed; bottom: 2rem; right: 2rem; z-index: 1000; display: flex; flex-direction: column; gap: 0.75rem; align-items: flex-end; }
+        .social-float-btn { width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0,0,0,0.15); transition: all 0.3s; text-decoration: none; animation: bounceIn 0.6s ease-out both; position: relative; }
+        .social-float-btn:hover { transform: scale(1.15) translateX(-5px); width: auto; padding: 0 1.2rem; border-radius: 50px; }
+        .social-float-btn .social-label { display: none; font-weight: 500; font-size: 0.85rem; margin-left: 0.5rem; white-space: nowrap; }
+        .social-float-btn:hover .social-label { display: inline; }
+        .float-whatsapp { background: var(--green-500); color: var(--white); animation-delay: 0s; }
+        .float-whatsapp i { font-size: 1.8rem; }
+        .float-tiktok { background: #000000; color: var(--white); animation-delay: 0.15s; }
+        .float-tiktok i { font-size: 1.5rem; }
+        .float-facebook { background: var(--facebook); color: var(--white); animation-delay: 0.3s; }
+        .float-facebook i { font-size: 1.8rem; }
+        .social-float-btn:hover.float-whatsapp { background: var(--green-600); }
+        .social-float-btn:hover.float-tiktok { background: #333; }
+        .social-float-btn:hover.float-facebook { background: #166fe5; }
+
+        /* Footer */
+        .footer { background: var(--chocolate); color: var(--white); padding: 4rem 0 0; }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 3rem; padding-bottom: 3rem; }
+        .footer-brand h3 { font-size: 1.8rem; margin-bottom: 1rem; color: var(--white); }
+        .footer-brand h3 span { color: var(--saumon); }
+        .footer-brand p { color: var(--gray-300); margin-bottom: 1.5rem; }
+        .social-links { display: flex; gap: 1rem; }
+        .social-link { width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--white); text-decoration: none; transition: all 0.3s; }
+        .social-link:hover { background: var(--saumon); transform: translateY(-3px); }
+        .footer-links h4 { color: var(--saumon); margin-bottom: 1.5rem; font-size: 1.2rem; }
+        .footer-links ul { list-style: none; }
+        .footer-links li { margin-bottom: 0.75rem; }
+        .footer-links a { color: var(--gray-300); text-decoration: none; transition: color 0.3s; }
+        .footer-links a:hover { color: var(--saumon); }
+        .footer-contact i { color: var(--saumon); margin-right: 0.75rem; }
+        .footer-contact p { color: var(--gray-300); margin-bottom: 0.75rem; }
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding: 1.5rem 0; display: flex; justify-content: space-between; align-items: center; color: var(--gray-400); font-size: 0.9rem; }
+        .admin-link { color: var(--gray-500); text-decoration: none; font-size: 0.8rem; transition: color 0.3s; }
+        .admin-link:hover { color: var(--saumon); }
+
+        /* Modal */
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; }
+        .modal.active { display: flex; }
+        .modal-content { background: var(--white); border-radius: 20px; padding: 2rem; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto; position: relative; animation: slideDown 0.3s ease-out; }
+        .modal-large { max-width: 700px; }
+        .modal-close { position: absolute; top: 1rem; right: 1rem; background: transparent; border: none; font-size: 1.5rem; cursor: pointer; color: var(--gray-500); transition: color 0.3s; }
+        .modal-close:hover { color: var(--red-500); }
+        .modal-title { font-size: 1.8rem; margin-bottom: 1.5rem; }
+
+        /* Toast */
+        .toast { position: fixed; top: 1rem; right: 1rem; background: var(--chocolate); color: var(--white); padding: 1rem 1.5rem; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 3000; display: none; animation: slideInRight 0.3s ease-out; border-left: 4px solid var(--green-500); }
+        .toast.show { display: block; }
+        .toast.error { border-left-color: var(--red-500); }
+
+        /* ============ ADMIN STYLES ============ */
+        .admin-login { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--saumon-light) 0%, var(--cream) 100%); padding: 2rem; }
+        .login-card { background: var(--white); padding: 3rem; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); max-width: 420px; width: 100%; animation: scaleIn 0.5s ease-out; }
+        .login-header { text-align: center; margin-bottom: 2rem; }
+        .login-icon { width: 70px; height: 70px; background: var(--saumon-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: var(--saumon-dark); font-size: 2rem; }
+        .login-title { font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .login-subtitle { color: var(--gray-500); font-size: 0.9rem; }
+        .demo-info { background: var(--gray-50); padding: 1rem; border-radius: 10px; margin-top: 1.5rem; font-size: 0.85rem; text-align: center; }
+
+        .admin-dashboard { display: flex; min-height: 100vh; background: var(--gray-50); }
+        .admin-sidebar { width: 280px; background: var(--chocolate); color: var(--white); padding: 1.5rem 0; position: fixed; height: 100vh; overflow-y: auto; transition: transform 0.3s; z-index: 100; }
+        .admin-sidebar-header { padding: 0 1.5rem 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 1rem; }
+        .admin-sidebar-header h3 { color: var(--white); font-size: 1.3rem; }
+        .admin-sidebar-header h3 span { color: var(--saumon); }
+        .admin-sidebar-header p { color: var(--gray-400); font-size: 0.85rem; margin-top: 0.25rem; }
+        .admin-user-info { padding: 1rem 1.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem; }
+        .admin-avatar { width: 40px; height: 40px; background: var(--saumon); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--white); }
+        .admin-user-name { font-weight: 500; color: var(--white); font-size: 0.9rem; }
+        .admin-user-role { font-size: 0.75rem; color: var(--saumon-light); }
+        .admin-nav { list-style: none; padding: 0 0.75rem; }
+        .admin-nav-item { padding: 0.7rem 1rem; display: flex; align-items: center; gap: 0.75rem; color: var(--gray-300); cursor: pointer; transition: all 0.3s; border-radius: 10px; margin-bottom: 0.2rem; font-size: 0.9rem; }
+        .admin-nav-item:hover { background: rgba(255,155,138,0.2); color: var(--white); }
+        .admin-nav-item.active { background: var(--saumon); color: var(--white); }
+        .admin-nav-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 1rem 1.5rem; }
+        .admin-main { flex: 1; margin-left: 280px; padding: 1.5rem; min-height: 100vh; }
+        .admin-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
+        .admin-header-title { font-size: 1.8rem; color: var(--chocolate); }
+        .admin-header-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+        .admin-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+        .stat-card { background: var(--white); padding: 1.2rem; border-radius: 12px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); transition: transform 0.3s, box-shadow 0.3s; }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .stat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
+        .stat-icon { width: 40px; height: 40px; background: var(--saumon-light); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--saumon-dark); }
+        .stat-change { color: var(--green-500); font-size: 0.8rem; font-weight: 500; }
+        .stat-change.negative { color: var(--red-500); }
+        .stat-value { font-size: 1.8rem; font-weight: bold; color: var(--chocolate); }
+        .stat-label { color: var(--gray-500); font-size: 0.8rem; }
+        .admin-charts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+        .chart-card { background: var(--white); padding: 1.2rem; border-radius: 12px; box-shadow: 0 3px 10px rgba(0,0,0,0.05); }
+        .chart-title { font-size: 1.1rem; color: var(--chocolate); margin-bottom: 0.75rem; }
+        .chart-container { position: relative; height: 220px; width: 100%; }
+        .admin-table-container { background: var(--white); border-radius: 12px; padding: 1.2rem; box-shadow: 0 3px 10px rgba(0,0,0,0.05); margin-bottom: 1.5rem; overflow-x: auto; }
+        .table-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem; }
+        .table-title { font-size: 1.2rem; color: var(--chocolate); }
+        .admin-table { width: 100%; border-collapse: collapse; min-width: 600px; font-size: 0.85rem; }
+        .admin-table th { text-align: left; padding: 0.75rem; background: var(--gray-50); font-weight: 600; color: var(--gray-700); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.3px; white-space: nowrap; }
+        .admin-table td { padding: 0.75rem; border-bottom: 1px solid var(--gray-200); }
+        .admin-table tbody tr:hover { background: var(--gray-50); }
+        .status-badge { padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.7rem; font-weight: 500; display: inline-block; white-space: nowrap; }
+        .status-success { background: var(--green-100); color: var(--green-700); }
+        .status-warning { background: var(--yellow-100); color: var(--yellow-700); }
+        .status-info { background: var(--blue-100); color: var(--blue-700); }
+        .status-error { background: var(--red-100); color: var(--red-700); }
+        .action-buttons { display: flex; gap: 0.3rem; }
+        .action-btn { padding: 0.3rem 0.45rem; border-radius: 6px; border: none; cursor: pointer; transition: all 0.2s; font-size: 0.75rem; }
+        .action-btn.edit { background: var(--blue-500); color: var(--white); }
+        .action-btn.edit:hover { background: #2563eb; }
+        .action-btn.delete { background: var(--red-500); color: var(--white); }
+        .action-btn.delete:hover { background: #dc2626; }
+        .action-btn.view { background: var(--saumon); color: var(--white); }
+        .action-btn.view:hover { background: var(--saumon-dark); }
+        .product-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .product-form-full { grid-column: span 2; }
+        .image-upload-area { border: 2px dashed var(--gray-300); border-radius: 10px; padding: 1.5rem; text-align: center; cursor: pointer; transition: border-color 0.3s; background: var(--gray-50); }
+        .image-upload-area:hover { border-color: var(--saumon); }
+        .image-upload-area i { font-size: 2rem; color: var(--gray-400); margin-bottom: 0.5rem; }
+        .image-upload-area p { font-size: 0.85rem; color: var(--gray-500); }
+        .image-upload-area img { max-width: 150px; max-height: 150px; border-radius: 8px; margin-top: 0.5rem; }
+        .search-bar { display: flex; align-items: center; background: var(--white); border-radius: 50px; padding: 0.4rem 0.8rem; border: 1px solid var(--gray-300); }
+        .search-bar i { color: var(--gray-400); margin-right: 0.5rem; }
+        .search-bar input { border: none; outline: none; font-family: 'Poppins', sans-serif; width: 180px; font-size: 0.9rem; }
+        .pagination { display: flex; justify-content: center; gap: 0.4rem; margin-top: 1rem; }
+        .page-item { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; background: var(--white); border: 1px solid var(--gray-300); cursor: pointer; transition: all 0.2s; font-size: 0.85rem; }
+        .page-item:hover { background: var(--saumon-light); border-color: var(--saumon); }
+        .page-item.active { background: var(--saumon); color: var(--white); border-color: var(--saumon); }
+        .admin-mobile-toggle { display: none; position: fixed; bottom: 1.5rem; left: 1.5rem; z-index: 200; background: var(--saumon); color: var(--white); width: 50px; height: 50px; border-radius: 50%; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 5px 15px rgba(255,155,138,0.4); border: none; }
+        .admin-section { animation: fadeIn 0.4s ease-out; }
+
+        /* Image Preview Modal */
+        .image-preview-modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.9); z-index: 4000; align-items: center; justify-content: center; }
+        .image-preview-modal.active { display: flex; }
+        .image-preview-modal img { max-width: 90vw; max-height: 90vh; border-radius: 10px; }
+        .image-preview-close { position: absolute; top: 2rem; right: 2rem; color: var(--white); font-size: 2rem; cursor: pointer; background: none; border: none; }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .admin-stats { grid-template-columns: repeat(2, 1fr); }
+            .admin-charts { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 1024px) {
+            .hero-title { font-size: 3rem; }
+            .hero-title-line2 { font-size: 2.8rem; }
+            .products-grid, .blog-grid, .services-grid { grid-template-columns: repeat(2, 1fr); }
+            .footer-grid { grid-template-columns: repeat(2, 1fr); }
+            .zones-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 900px) {
+            .admin-sidebar { transform: translateX(-100%); box-shadow: 5px 0 20px rgba(0,0,0,0.1); }
+            .admin-sidebar.active { transform: translateX(0); }
+            .admin-main { margin-left: 0; }
+            .admin-mobile-toggle { display: flex; }
+        }
+        @media (max-width: 768px) {
+            .top-bar-tagline { display: none; }
+            .logo-image { height: 40px; }
+            .nav-desktop { display: none; }
+            .header-actions .lang-selector { display: none; }
+            .mobile-menu-btn { display: block; }
+            .hero-grid { grid-template-columns: 1fr; text-align: center; }
+            .hero-title { font-size: 2.5rem; }
+            .hero-title-line2 { font-size: 2rem; }
+            .hero-description { margin: 0 auto 2rem; }
+            .hero-buttons { justify-content: center; }
+            .products-grid, .training-grid, .blog-grid, .contact-grid, .services-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .floating-element { display: none; }
+            .admin-stats { grid-template-columns: 1fr; }
+            .page-title { font-size: 2.5rem; }
+            .zones-grid { grid-template-columns: repeat(2, 1fr); }
+            .delivery-zones { padding: 2rem; }
+            .steps-grid { grid-template-columns: 1fr; }
+            .delivery-cta { padding: 2rem 1.5rem; }
+            .delivery-cta h3 { font-size: 1.8rem; }
+            .admin-header { flex-direction: column; align-items: flex-start; }
+            .product-form-grid { grid-template-columns: 1fr; }
+            .product-form-full { grid-column: span 1; }
+            .social-float-btn { width: 48px; height: 48px; }
+            .social-float-btn i { font-size: 1.4rem; }
+        }
+        @media (max-width: 480px) {
+            .hero-title { font-size: 2rem; }
+            .hero-title-line2 { font-size: 1.6rem; }
+            .hero-buttons { flex-direction: column; }
+            .btn { width: 100%; }
+            .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+            .page-title { font-size: 2rem; }
+            .zones-grid { grid-template-columns: 1fr; }
+            .social-float-container { bottom: 1rem; right: 1rem; gap: 0.5rem; }
+            .social-float-btn { width: 42px; height: 42px; }
+            .social-float-btn i { font-size: 1.2rem; }
+        }
+        .text-center { text-align: center; }
+        .mb-1 { margin-bottom: 0.5rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        .mb-3 { margin-bottom: 1.5rem; }
+        .mb-4 { margin-bottom: 2rem; }
+        .mt-1 { margin-top: 0.5rem; }
+        .mt-2 { margin-top: 1rem; }
+        .mt-3 { margin-top: 1.5rem; }
+        .mt-4 { margin-top: 2rem; }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-4 { gap: 1rem; }
+        .flex-wrap { flex-wrap: wrap; }
+        .w-full { width: 100%; }
+    </style>
+</head>
+<body>
+    <div id="toast" class="toast"></div>
+
+    <!-- Top Bar -->
+    <div class="top-bar"><div class="container"><div class="top-bar-content"><div class="brand-name">TOUR <span>DE</span> CONTRÔLE</div><div class="top-bar-tagline" id="topBarTagline">L'Excellence Pâtissière à Votre Portée</div></div></div></div>
+
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo-container" data-page="home">
+                    <img src="images/logoTR.jpeg" alt="TOUR DE CONTRÔLE Logo" class="logo-image" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+                    <span class="logo-text" style="display:none;">TOUR <span>DE</span> CONTRÔLE</span>
+                </a>
+                <nav class="nav-desktop" id="navDesktop"></nav>
+                <div class="header-actions">
+                    <div class="lang-selector"><button class="lang-btn active" data-lang="fr">FR</button><button class="lang-btn" data-lang="en">EN</button></div>
+                    <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
+                </div>
+            </div>
+        </div>
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="container">
+                <nav class="mobile-nav" id="mobileNav"></nav>
+                <div class="mobile-lang-selector"><button class="mobile-lang-btn active" data-lang="fr">Français</button><button class="mobile-lang-btn" data-lang="en">English</button></div>
+            </div>
+        </div>
+    </header>
+
+    <main id="mainContent"></main>
+
+    <!-- Social Floating Buttons -->
+    <div class="social-float-container">
+        <a href="https://wa.me/237690458799" target="_blank" rel="noopener noreferrer" class="social-float-btn float-whatsapp">
+            <i class="fab fa-whatsapp"></i><span class="social-label">WhatsApp</span>
+        </a>
+        <a href="https://www.tiktok.com/@tour.de.contrle90?_r=1&_t=ZS-95klwKCiEvk" target="_blank" rel="noopener noreferrer" class="social-float-btn float-tiktok">
+            <i class="fab fa-tiktok"></i><span class="social-label">TikTok</span>
+        </a>
+        <a href="https://www.facebook.com/share/1DciN84ENY/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" class="social-float-btn float-facebook">
+            <i class="fab fa-facebook-f"></i><span class="social-label">Facebook</span>
+        </a>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container"><div class="footer-grid">
+            <div class="footer-brand"><h3>TOUR <span>DE</span> CONTRÔLE</h3><p id="footerDesc">L'excellence pâtissière à votre portée.</p><div class="social-links"><a href="https://www.facebook.com/share/1DciN84ENY/?mibextid=wwXIfr" target="_blank" class="social-link"><i class="fab fa-facebook-f"></i></a><a href="https://www.tiktok.com/@tour.de.contrle90?_r=1&_t=ZS-95klwKCiEvk" target="_blank" class="social-link"><i class="fab fa-tiktok"></i></a><a href="https://wa.me/237690458799" target="_blank" class="social-link"><i class="fab fa-whatsapp"></i></a></div></div>
+            <div class="footer-links"><h4 id="footerNavTitle">Navigation</h4><ul id="footerNav"></ul></div>
+            <div class="footer-links"><h4 id="footerInfoTitle">Informations</h4><ul id="footerInfo"></ul></div>
+            <div class="footer-contact"><h4 id="footerContactTitle">Contact</h4><p><i class="fas fa-map-marker-alt"></i> <span id="footerAddress">Immeuble Socropole, Mvog Mbi, Yaoundé</span></p><p><i class="fas fa-phone"></i> +237 690 458 799</p><p><i class="fas fa-envelope"></i> contact@tourdecontrole.cm</p><p><i class="fas fa-clock"></i> <span id="footerHours">Lun-Sam: 8h-20h</span></p></div>
+        </div></div>
+        <div class="footer-bottom"><div class="container" style="display:flex;justify-content:space-between;"><span id="footerCopyright">© 2024 TOUR DE CONTRÔLE</span><a href="#" class="admin-link" data-page="admin-login"><i class="fas fa-lock"></i> <span id="adminAccessText">Accès Administrateur</span></a></div></div>
+    </footer>
+
+    <button class="admin-mobile-toggle" id="adminMobileToggle" style="display:none;"><i class="fas fa-bars"></i></button>
+
+    <!-- Image Preview Modal -->
+    <div class="image-preview-modal" id="imagePreviewModal">
+        <button class="image-preview-close" onclick="closeImagePreview()">&times;</button>
+        <img id="imagePreviewImg" src="" alt="Preview">
+    </div>
+
+    <!-- Modals -->
+    <div id="bookingModal" class="modal"><div class="modal-content"><button class="modal-close" onclick="closeModal('bookingModal')">&times;</button><h3 class="modal-title" id="bookingModalTitle">Réserver une formation</h3><form id="bookingForm"><div class="form-group"><label class="form-label">Formation choisie</label><input type="text" id="trainingName" class="form-input" readonly></div><div class="form-group"><label class="form-label">Nom complet *</label><input type="text" id="bookingName" class="form-input" required></div><div class="form-group"><label class="form-label">Email *</label><input type="email" id="bookingEmail" class="form-input" required></div><div class="form-group"><label class="form-label">Téléphone *</label><input type="tel" id="bookingPhone" class="form-input" required></div><div class="form-group"><label class="form-label">Date souhaitée *</label><input type="date" id="bookingDate" class="form-input" required></div><button type="submit" class="btn btn-primary w-full">Confirmer</button></form></div></div>
+
+    <div id="productModal" class="modal"><div class="modal-content modal-large"><button class="modal-close" onclick="closeModal('productModal')">&times;</button><h3 class="modal-title" id="productModalTitle">Ajouter un produit</h3><form id="productForm"><input type="hidden" id="productId"><div class="product-form-grid"><div class="form-group"><label class="form-label">Nom du produit *</label><input type="text" id="productName" class="form-input" required></div><div class="form-group"><label class="form-label">Catégorie *</label><select id="productCategory" class="form-select"><option value="birthday">Anniversaire</option><option value="wedding">Mariage</option><option value="pastry">Pâtisserie Fraîche</option><option value="dry">Pâtisserie Sèche</option></select></div><div class="form-group"><label class="form-label">Prix (FCFA) *</label><input type="number" id="productPrice" class="form-input" required min="0"></div><div class="form-group"><label class="form-label">Stock</label><select id="productStock" class="form-select"><option value="En stock">En stock</option><option value="Sur commande">Sur commande</option><option value="Rupture">Rupture</option></select></div><div class="form-group product-form-full"><label class="form-label">Image du produit</label><div class="image-upload-area" id="imageUploadArea" onclick="document.getElementById('productImageInput').click()"><i class="fas fa-cloud-upload-alt"></i><p>Cliquez pour uploader une image</p><p style="font-size:0.7rem;">ou entrez l'URL ci-dessous</p><img id="imagePreviewThumb" src="" style="display:none;"></div><input type="file" id="productImageInput" accept="image/*" style="display:none;" onchange="handleImageUpload(event)"><input type="url" id="productImage" class="form-input mt-2" placeholder="Ou entrez l'URL de l'image"></div><div class="form-group product-form-full"><label class="form-label">Description</label><textarea id="productDescription" class="form-textarea" rows="3"></textarea></div></div><div class="flex gap-2 mt-3"><button type="submit" class="btn btn-primary" style="flex:1;">Enregistrer</button><button type="button" class="btn btn-secondary" style="flex:1;" onclick="closeModal('productModal')">Annuler</button></div></form></div></div>
+
+    <div id="deleteModal" class="modal"><div class="modal-content" style="max-width:400px;"><button class="modal-close" onclick="closeModal('deleteModal')">&times;</button><h3 class="modal-title">Confirmer la suppression</h3><p class="mb-3">Êtes-vous sûr ? Cette action est irréversible.</p><input type="hidden" id="deleteItemId"><input type="hidden" id="deleteItemType"><div class="flex gap-2"><button class="btn btn-danger" style="flex:1;" onclick="confirmDelete()">Supprimer</button><button class="btn btn-secondary" style="flex:1;" onclick="closeModal('deleteModal')">Annuler</button></div></div></div>
+
+    <div id="orderDetailsModal" class="modal"><div class="modal-content"><button class="modal-close" onclick="closeModal('orderDetailsModal')">&times;</button><h3 class="modal-title">Détails</h3><div id="orderDetailsContent"></div></div></div>
+
+    <div id="messageModal" class="modal"><div class="modal-content"><button class="modal-close" onclick="closeModal('messageModal')">&times;</button><h3 class="modal-title">Message</h3><div id="messageContent"></div></div></div>
+
+    <script>
+        const translations = {
+            fr: { topBarTagline: "L'Excellence Pâtissière à Votre Portée", home: "Accueil", products: "Produits", training: "Formations", delivery: "Livraison", blog: "Blog", contact: "Contact", hero_badge: "✨ Pâtisserie Artisanale de Luxe", hero_title1: "TOUR DE CONTRÔLE", hero_title2: "L'Excellence Pâtissière à Votre Portée", hero_desc: "Créations artisanales de luxe pour vos moments d'exception. Formations professionnelles pour passionnés de pâtisserie.", order_now: "Commander Maintenant", learn_more: "En Savoir Plus", our_creations: "Nos Créations", creations_subtitle: "Des gâteaux d'exception pour tous vos événements", see_all_products: "Voir tous nos produits", order_whatsapp: "Commander", category_all: "Tous", category_birthday: "Anniversaire", category_wedding: "Mariage", category_fresh: "Pâtisserie Fraîche", category_dry: "Pâtisserie Sèche", our_trainings: "Nos Formations", training_subtitle: "Apprenez l'art de la pâtisserie", fresh_training: "Pâtisserie Fraîche", dry_training: "Pâtisserie Sèche", duration: "Durée", weeks4: "4 semaines", weeks3: "3 semaines", places_available: "places", next_session: "Prochaine session", certificate_included: "Certificat inclus", book_place: "Réserver ma place", delivery_title: "Livraison & Prestations", delivery_subtitle: "Un service premium", home_delivery: "Livraison à Domicile", delivery_fees: "Frais à partir de", delivery_time: "Délai: 45-60 min", pickup: "Retrait sur Place", free: "Gratuit", location_mvogmbi: "Mvog Mbi, Yaoundé", on_site: "Prestation sur Place", on_quote: "Sur devis", popular: "Populaire", premium: "Premium", delivery_zones: "Zones de livraison", order_48h: "Commande 48h à l'avance", order_now_delivery: "Commander", how_it_works: "Comment ça marche ?", step1_title: "Commandez", step2_title: "Nous préparons", step3_title: "Dégustez", ready_to_order: "Prêt à commander ?", call: "Appeler", blog_title: "Blog & Recettes", blog_subtitle: "Conseils et recettes", blog1_title: "10 Astuces pour des Macarons Parfaits", blog2_title: "Recette: Gâteau au Chocolat Fondant", blog3_title: "Comment Choisir ses Ingrédients", read_more: "Lire Plus", chef_moussa: "Chef Moussa", contact_title: "Contactez-Nous", send_message: "Envoyez-nous un message", full_name: "Nom complet", email: "Email", phone: "Téléphone", subject: "Sujet", message: "Message", send: "Envoyer", contact_info: "Informations de contact", address_full: "Immeuble Socropole, Mvog Mbi, Yaoundé, Cameroun", opening_hours: "Horaires", hours_full: "Lun-Sam: 8h-20h", sunday_hours: "Dim: 9h-18h", footer_desc: "L'excellence pâtissière à votre portée.", navigation: "Navigation", information: "Informations", contact_footer: "Contact", copyright: "© 2024 TOUR DE CONTRÔLE", admin_access: "Accès Administrateur", admin_login_title: "Administration", login: "Se connecter", demo_credentials: "Identifiants démo :", back_to_site: "Retour au site", dashboard: "Tableau de bord", overview: "Vue d'ensemble", orders: "Commandes", students: "Étudiants", messages: "Messages", settings: "Paramètres", logout: "Déconnexion", total_orders: "Commandes", revenue: "Revenus", active_students: "Étudiants", products_count: "Produits", recent_orders: "Commandes récentes", add_product: "Ajouter un produit", export: "Exporter", product_management: "Gestion produits", order_management: "Gestion commandes", image: "Image", name: "Nom", category: "Catégorie", price: "Prix", stock: "Stock", actions: "Actions", status: "Statut", client: "Client", product: "Produit", amount: "Montant", date: "Date", edit: "Modifier", delete: "Supprimer", view: "Voir", save: "Enregistrer", cancel: "Annuler", connection_success: "Connexion réussie !", logout_success: "Déconnexion réussie", product_added: "Produit ajouté", product_updated: "Produit mis à jour", product_deleted: "Produit supprimé", status_updated: "Statut mis à jour", message_sent: "Message envoyé !", all: "Tous", search: "Rechercher...", in_stock: "En stock", on_order: "Sur commande", out_of_stock: "Rupture" },
+            en: { topBarTagline: "Pastry Excellence at Your Doorstep", home: "Home", products: "Products", training: "Training", delivery: "Delivery", blog: "Blog", contact: "Contact", hero_badge: "✨ Luxury Artisanal Pastry", hero_title1: "TOUR DE CONTRÔLE", hero_title2: "Pastry Excellence at Your Doorstep", hero_desc: "Luxury artisanal creations for your exceptional moments.", order_now: "Order Now", learn_more: "Learn More", our_creations: "Our Creations", creations_subtitle: "Exceptional cakes for all your events", see_all_products: "See all products", order_whatsapp: "Order", category_all: "All", category_birthday: "Birthday", category_wedding: "Wedding", category_fresh: "Fresh Pastry", category_dry: "Dry Pastry", our_trainings: "Our Trainings", training_subtitle: "Learn the art of pastry", fresh_training: "Fresh Pastry", dry_training: "Dry Pastry", duration: "Duration", weeks4: "4 weeks", weeks3: "3 weeks", places_available: "places", next_session: "Next session", certificate_included: "Certificate included", book_place: "Book my place", delivery_title: "Delivery & Services", delivery_subtitle: "Premium service", home_delivery: "Home Delivery", delivery_fees: "Fees from", delivery_time: "Delivery: 45-60 min", pickup: "Pickup", free: "Free", location_mvogmbi: "Mvog Mbi, Yaoundé", on_site: "On-site Service", on_quote: "On quote", popular: "Popular", premium: "Premium", delivery_zones: "Delivery zones", order_48h: "Order 48h in advance", order_now_delivery: "Order", how_it_works: "How it works?", step1_title: "Order", step2_title: "We prepare", step3_title: "Enjoy", ready_to_order: "Ready to order?", call: "Call", blog_title: "Blog & Recipes", blog_subtitle: "Tips and recipes", blog1_title: "10 Tips for Perfect Macarons", blog2_title: "Recipe: Molten Chocolate Cake", blog3_title: "How to Choose Ingredients", read_more: "Read More", chef_moussa: "Chef Moussa", contact_title: "Contact Us", send_message: "Send us a message", full_name: "Full name", email: "Email", phone: "Phone", subject: "Subject", message: "Message", send: "Send", contact_info: "Contact Info", address_full: "Socropole Building, Mvog Mbi, Yaoundé", opening_hours: "Hours", hours_full: "Mon-Sat: 8am-8pm", sunday_hours: "Sun: 9am-6pm", footer_desc: "Pastry excellence at your doorstep.", navigation: "Navigation", information: "Information", contact_footer: "Contact", copyright: "© 2024 TOUR DE CONTRÔLE", admin_access: "Administrator Access", admin_login_title: "Administration", login: "Login", demo_credentials: "Demo credentials:", back_to_site: "Back to site", dashboard: "Dashboard", overview: "Overview", orders: "Orders", students: "Students", messages: "Messages", settings: "Settings", logout: "Logout", total_orders: "Orders", revenue: "Revenue", active_students: "Students", products_count: "Products", recent_orders: "Recent Orders", add_product: "Add Product", export: "Export", product_management: "Product Management", order_management: "Order Management", image: "Image", name: "Name", category: "Category", price: "Price", stock: "Stock", actions: "Actions", status: "Status", client: "Client", product: "Product", amount: "Amount", date: "Date", edit: "Edit", delete: "Delete", view: "View", save: "Save", cancel: "Cancel", connection_success: "Login successful!", logout_success: "Logout successful", product_added: "Product added", product_updated: "Product updated", product_deleted: "Product deleted", status_updated: "Status updated", message_sent: "Message sent!", all: "All", search: "Search...", in_stock: "In stock", on_order: "On order", out_of_stock: "Out of stock" }
+        };
+
+        const appState = { currentPage: 'home', language: 'fr', isAuthenticated: false, user: null, activeCategory: 'all', adminActivePage: 'overview',
+            products: JSON.parse(localStorage.getItem('tdc_products') || `[{"id":1,"name":"Gâteau Chocolat Intense","category":"birthday","categoryName":"Anniversaire","price":18000,"stock":"En stock","description":"Un délicieux gâteau au chocolat intense","image":"https://images.pexels.com/photos/291528/pexels-photo-291528.jpeg?auto=compress&cs=tinysrgb&w=400"},{"id":2,"name":"Pièce Montée Élégance","category":"wedding","categoryName":"Mariage","price":150000,"stock":"Sur commande","description":"Pièce montée élégante pour mariage","image":"https://images.pexels.com/photos/1721934/pexels-photo-1721934.jpeg?auto=compress&cs=tinysrgb&w=400"},{"id":3,"name":"Millefeuille Vanille","category":"pastry","categoryName":"Pâtisserie Fraîche","price":3500,"stock":"En stock","description":"Millefeuille à la vanille","image":"https://images.pexels.com/photos/1126359/pexels-photo-1126359.jpeg?auto=compress&cs=tinysrgb&w=400"},{"id":4,"name":"Macarons Assortis","category":"dry","categoryName":"Pâtisserie Sèche","price":5000,"stock":"En stock","description":"Assortiment de macarons","image":"https://images.pexels.com/photos/239578/pexels-photo-239578.jpeg?auto=compress&cs=tinysrgb&w=400"},{"id":5,"name":"Gâteau Fraises-Chantilly","category":"birthday","categoryName":"Anniversaire","price":22000,"stock":"En stock","description":"Gâteau fraises et chantilly","image":"https://images.pexels.com/photos/1854652/pexels-photo-1854652.jpeg?auto=compress&cs=tinysrgb&w=400"},{"id":6,"name":"Croissants Pur Beurre","category":"pastry","categoryName":"Pâtisserie Fraîche","price":800,"stock":"En stock","description":"Croissants pur beurre","image":"https://images.pexels.com/photos/2135/food-france-morning-breakfast.jpg?auto=compress&cs=tinysrgb&w=400"}]`),
+            orders: JSON.parse(localStorage.getItem('tdc_orders') || `[{"id":1,"client":"Marie K.","product":"Gâteau d'anniversaire","amount":25000,"status":"Livré","date":"2024-12-15"},{"id":2,"client":"Paul B.","product":"Macarons x2","amount":10000,"status":"En cours","date":"2024-12-16"}]`),
+            students: [{ id: 1, name: 'Alice Kouam', formation: 'Pâtisserie Fraîche', date: '2024-12-10', status: 'Confirmé' }],
+            contacts: JSON.parse(localStorage.getItem('tdc_contacts') || `[]`)
+        };
+
+        function saveData() { localStorage.setItem('tdc_products', JSON.stringify(appState.products)); localStorage.setItem('tdc_orders', JSON.stringify(appState.orders)); localStorage.setItem('tdc_contacts', JSON.stringify(appState.contacts)); }
+        function t(k) { return translations[appState.language]?.[k] || k; }
+        function showToast(m, type='success') { const toast = document.getElementById('toast'); toast.textContent = m; toast.className = `toast ${type} show`; setTimeout(() => toast.classList.remove('show'), 4000); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function formatPrice(p) { return (p||0).toLocaleString() + ' FCFA'; }
+        function getCategoryName(c) { const m = appState.language==='fr' ? {birthday:'Anniversaire',wedding:'Mariage',pastry:'Pâtisserie Fraîche',dry:'Pâtisserie Sèche'} : {birthday:'Birthday',wedding:'Wedding',pastry:'Fresh Pastry',dry:'Dry Pastry'}; return m[c]||c; }
+        function getStatusClass(s) { const m={'Livré':'success','Confirmé':'info','En cours':'warning','En attente':'warning','Annulé':'error','Non lu':'warning','Lu':'success'}; return m[s]||'info'; }
+        function formatDate(d) { return new Date(d).toLocaleDateString('fr-FR',{year:'numeric',month:'short',day:'numeric'}); }
+
+        let uploadedImageData = null;
+        window.handleImageUpload = function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedImageData = e.target.result;
+                    document.getElementById('imagePreviewThumb').src = e.target.result;
+                    document.getElementById('imagePreviewThumb').style.display = 'block';
+                    document.getElementById('productImage').value = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+
+        window.closeImagePreview = function() { document.getElementById('imagePreviewModal').classList.remove('active'); };
+        window.openImagePreview = function(src) { document.getElementById('imagePreviewImg').src = src; document.getElementById('imagePreviewModal').classList.add('active'); };
+
+        function updateUILanguage() {
+            document.getElementById('topBarTagline').textContent = t('topBarTagline');
+            document.getElementById('footerDesc').textContent = t('footer_desc');
+            document.getElementById('footerNavTitle').textContent = t('navigation');
+            document.getElementById('footerInfoTitle').textContent = t('information');
+            document.getElementById('footerContactTitle').textContent = t('contact_footer');
+            document.getElementById('footerAddress').textContent = t('address_full');
+            document.getElementById('footerHours').textContent = t('hours_full') + ' | ' + t('sunday_hours');
+            document.getElementById('footerCopyright').textContent = t('copyright');
+            document.getElementById('adminAccessText').textContent = t('admin_access');
+            updateNavigationMenus();
+            if (!['admin-login','admin-dashboard'].includes(appState.currentPage)) navigateTo(appState.currentPage);
+        }
+
+        function updateNavigationMenus() {
+            const items = ['home','products','training','delivery','blog','contact'];
+            document.getElementById('navDesktop').innerHTML = items.map(i => `<a href="#" class="nav-link ${appState.currentPage===i?'active':''}" data-page="${i}">${t(i)}</a>`).join('');
+            document.getElementById('mobileNav').innerHTML = items.map(i => `<a href="#" class="mobile-nav-link ${appState.currentPage===i?'active':''}" data-page="${i}">${t(i)}</a>`).join('');
+            document.getElementById('footerNav').innerHTML = items.map(i => `<li><a href="#" data-page="${i}">${t(i)}</a></li>`).join('');
+            attachPageLinks();
+        }
+
+        function navigateTo(page) {
+            appState.currentPage = page;
+            document.querySelectorAll('.nav-link,.mobile-nav-link').forEach(l => { l.classList.remove('active'); if(l.dataset.page===page) l.classList.add('active'); });
+            document.getElementById('mobileMenu')?.classList.remove('active');
+            document.getElementById('adminMobileToggle').style.display = (page==='admin-dashboard')?'flex':'none';
+            switch(page){ case 'home':renderHomePage();break;case 'products':renderProductsPage();break;case 'training':renderTrainingPage();break;case 'delivery':renderDeliveryPage();break;case 'blog':renderBlogPage();break;case 'contact':renderContactPage();break;case 'admin-login':renderAdminLoginPage();break;case 'admin-dashboard':renderAdminDashboardPage();break;default:renderHomePage(); }
+            updateNavigationMenus(); window.scrollTo(0,0);
+        }
+
+        function attachPageLinks() { document.querySelectorAll('[data-page]').forEach(l => l.addEventListener('click', e => { e.preventDefault(); navigateTo(l.dataset.page); })); }
+        function logout() { appState.isAuthenticated = false; appState.user = null; showToast(t('logout_success')); navigateTo('home'); }
+
+        function productCardHTML(p) {
+            return `<div class="product-card"><div class="product-image" onclick="openImagePreview('${p.image}')"><img src="${p.image}" alt="${p.name}"><span class="product-category">${p.categoryName}</span></div><div class="product-content"><h3 class="product-title">${p.name}</h3><p class="product-price">${formatPrice(p.price)}</p><div class="product-actions"><a href="https://wa.me/237690458799?text=Commande%20${encodeURIComponent(p.name)}" target="_blank" class="btn btn-whatsapp"><i class="fab fa-whatsapp"></i> ${t('order_whatsapp')}</a></div></div></div>`;
+        }
+
+        function renderHomePage() {
+            document.getElementById('mainContent').innerHTML = `<section class="hero"><div class="container"><div class="hero-grid"><div class="hero-content"><div class="hero-badge">${t('hero_badge')}</div><h1 class="hero-title"><span class="hero-title-line1">${t('hero_title1')}</span><span class="hero-title-line2">${t('hero_title2')}</span></h1><p class="hero-description">${t('hero_desc')}</p><div class="hero-buttons"><a href="#" class="btn btn-primary" data-page="products">${t('order_now')} <i class="fas fa-arrow-right"></i></a><a href="#" class="btn btn-secondary" data-page="products">${t('learn_more')} <i class="fas fa-chevron-right"></i></a></div></div><div class="hero-image"><img src="https://images.pexels.com/photos/1854652/pexels-photo-1854652.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Pâtisserie"><div class="floating-element floating-1">🎂</div><div class="floating-element floating-2">🍰</div><div class="floating-element floating-3">🥐</div></div></div></div></section><section class="products-section"><div class="container"><h2 class="section-title">${t('our_creations')}</h2><div class="products-grid" id="featuredProducts"></div><div class="text-center mt-4"><a href="#" class="btn btn-primary" data-page="products">${t('see_all_products')} <i class="fas fa-arrow-right"></i></a></div></div></section>`;
+            document.getElementById('featuredProducts').innerHTML = appState.products.slice(0,3).map(p => productCardHTML(p)).join('');
+            attachPageLinks();
+        }
+
+        function renderProductsPage() {
+            document.getElementById('mainContent').innerHTML = `<div class="page-header"><div class="container"><h1 class="page-title">${t('products')}</h1></div></div><section class="products-section"><div class="container"><div class="category-filter">${['all','birthday','wedding','pastry','dry'].map(c => `<button class="category-btn ${c==='all'?'active':''}" data-category="${c}">${t('category_'+c)}</button>`).join('')}</div><div class="products-grid" id="productsGrid"></div></div></section>`;
+            renderProductsGrid('all');
+            document.querySelectorAll('.category-btn').forEach(b => b.addEventListener('click', function(){ document.querySelectorAll('.category-btn').forEach(x=>x.classList.remove('active')); this.classList.add('active'); renderProductsGrid(this.dataset.category); }));
+            attachPageLinks();
+        }
+
+        function renderProductsGrid(cat) {
+            const filtered = cat==='all' ? appState.products : appState.products.filter(p=>p.category===cat);
+            document.getElementById('productsGrid').innerHTML = filtered.map(p => productCardHTML(p)).join('');
+        }
+
+        function renderTrainingPage() {
+            document.getElementById('mainContent').innerHTML = `<div class="page-header"><div class="container"><h1 class="page-title">${t('our_trainings')}</h1></div></div><section class="training-section"><div class="container"><div class="training-grid"><div class="training-card"><div class="training-image"><img src="https://images.pexels.com/photos/3992208/pexels-photo-3992208.jpeg?auto=compress&cs=tinysrgb&w=600"></div><div class="training-content"><h3>${t('fresh_training')}</h3><ul class="training-details"><li><i class="fas fa-clock"></i> ${t('duration')}: ${t('weeks4')}</li><li><i class="fas fa-users"></i> 8 ${t('places_available')}</li><li><i class="fas fa-calendar"></i> ${t('next_session')}: 15/01/2025</li></ul><p class="training-price">250 000 FCFA</p><button class="btn btn-primary" onclick="bookTraining('Pâtisserie Fraîche')">${t('book_place')}</button></div></div><div class="training-card"><div class="training-image"><img src="https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=600"></div><div class="training-content"><h3>${t('dry_training')}</h3><ul class="training-details"><li><i class="fas fa-clock"></i> ${t('duration')}: ${t('weeks3')}</li><li><i class="fas fa-users"></i> 10 ${t('places_available')}</li><li><i class="fas fa-calendar"></i> ${t('next_session')}: 05/02/2025</li></ul><p class="training-price">200 000 FCFA</p><button class="btn btn-primary" onclick="bookTraining('Pâtisserie Sèche')">${t('book_place')}</button></div></div></div></div></section>`;
+            attachPageLinks();
+        }
+
+        function renderDeliveryPage() {
+            const zones = ['Mvog Mbi','Bastos','Biyem-Assi','Melen','Nlongkak','Mvog Ada','Elig Essono','Mokolo','Etoudi','Obili','Nkolbisson','Ekounou'];
+            document.getElementById('mainContent').innerHTML = `<div class="page-header"><div class="container"><h1 class="page-title">${t('delivery_title')}</h1></div></div><section class="delivery-section"><div class="container"><div class="services-grid"><div class="service-card"><span class="service-badge">${t('popular')}</span><div class="service-icon"><i class="fas fa-truck"></i></div><h3>${t('home_delivery')}</h3><p class="service-price"><strong>2 000 FCFA</strong></p></div><div class="service-card"><span class="service-badge">${t('free')}</span><div class="service-icon"><i class="fas fa-store"></i></div><h3>${t('pickup')}</h3><p class="service-price"><strong>${t('free')}</strong></p></div><div class="service-card"><span class="service-badge">${t('premium')}</span><div class="service-icon"><i class="fas fa-calendar-check"></i></div><h3>${t('on_site')}</h3><p class="service-price"><strong>${t('on_quote')}</strong></p></div></div><div class="delivery-zones"><div class="zones-header"><i class="fas fa-map-marked-alt"></i><h3>${t('delivery_zones')}</h3></div><div class="zones-grid">${zones.map(z => `<div class="zone-item"><i class="fas fa-check-circle"></i><span>${z}</span></div>`).join('')}</div></div><div class="delivery-cta"><h3>${t('ready_to_order')}</h3><div class="cta-buttons"><a href="https://wa.me/237690458799" target="_blank" class="btn btn-primary"><i class="fab fa-whatsapp"></i> WhatsApp</a><a href="tel:+237690458799" class="btn btn-outline-light"><i class="fas fa-phone"></i> ${t('call')}</a></div></div></div></section>`;
+            attachPageLinks();
+        }
+
+        function renderBlogPage() {
+            document.getElementById('mainContent').innerHTML = `<div class="page-header"><div class="container"><h1 class="page-title">${t('blog_title')}</h1></div></div><section class="blog-section"><div class="container"><div class="blog-grid"><div class="blog-card"><div class="blog-image"><img src="https://images.pexels.com/photos/3026804/pexels-photo-3026804.jpeg?auto=compress&cs=tinysrgb&w=600"></div><div class="blog-content"><div class="blog-meta"><span><i class="far fa-calendar"></i> 15 Déc 2024</span></div><h3 class="blog-title">${t('blog1_title')}</h3><a href="#" class="blog-link">${t('read_more')} <i class="fas fa-arrow-right"></i></a></div></div><div class="blog-card"><div class="blog-image"><img src="https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=600"></div><div class="blog-content"><div class="blog-meta"><span><i class="far fa-calendar"></i> 10 Déc 2024</span></div><h3 class="blog-title">${t('blog2_title')}</h3><a href="#" class="blog-link">${t('read_more')} <i class="fas fa-arrow-right"></i></a></div></div><div class="blog-card"><div class="blog-image"><img src="https://images.pexels.com/photos/4109788/pexels-photo-4109788.jpeg?auto=compress&cs=tinysrgb&w=600"></div><div class="blog-content"><div class="blog-meta"><span><i class="far fa-calendar"></i> 5 Déc 2024</span></div><h3 class="blog-title">${t('blog3_title')}</h3><a href="#" class="blog-link">${t('read_more')} <i class="fas fa-arrow-right"></i></a></div></div></div></div></section>`;
+            attachPageLinks();
+        }
+
+        function renderContactPage() {
+            document.getElementById('mainContent').innerHTML = `<div class="page-header"><div class="container"><h1 class="page-title">${t('contact_title')}</h1></div></div><section class="contact-section"><div class="container"><div class="contact-grid"><div class="contact-form"><h3 class="mb-3">${t('send_message')}</h3><form id="contactForm"><div class="form-group"><label class="form-label">${t('full_name')} *</label><input type="text" name="name" class="form-input" required></div><div class="form-group"><label class="form-label">${t('email')} *</label><input type="email" name="email" class="form-input" required></div><div class="form-group"><label class="form-label">${t('phone')}</label><input type="tel" name="phone" class="form-input"></div><div class="form-group"><label class="form-label">${t('message')} *</label><textarea name="message" class="form-textarea" required></textarea></div><button type="submit" class="btn btn-primary w-full">${t('send')}</button></form></div><div><div class="contact-info"><h3>${t('contact_info')}</h3><div class="info-item"><i class="fas fa-map-marker-alt"></i><div><p>${t('address_full')}</p></div></div><div class="info-item"><i class="fas fa-phone"></i><div><p>+237 690 458 799</p></div></div><div class="info-item"><i class="fas fa-envelope"></i><div><p>contact@tourdecontrole.cm</p></div></div></div><div class="map-container"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3980.8155621840747!2d11.518696673981221!3d3.849732548448779!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x108bcf8b0f7e4235%3A0x9b5434bf3db426c8!2sSOCROPOLE%2C%20Mvog-bi!5e0!3m2!1sfr!2scm!4v1776872827221!5m2!1sfr!2scm" style="border:0;" allowfullscreen="" loading="lazy"></iframe></div></div></div></div></section>`;
+            attachPageLinks();
+            document.getElementById('contactForm')?.addEventListener('submit', e => { e.preventDefault(); const fd = new FormData(e.target); appState.contacts.push({id:Date.now(),name:fd.get('name'),email:fd.get('email'),phone:fd.get('phone')||'',message:fd.get('message'),date:new Date().toISOString().split('T')[0],status:'Non lu'}); saveData(); showToast(t('message_sent')); e.target.reset(); });
+        }
+
+        function renderAdminLoginPage() {
+            document.getElementById('mainContent').innerHTML = `<div class="admin-login"><div class="login-card"><div class="login-header"><div class="login-icon"><i class="fas fa-lock"></i></div><h2 class="login-title">${t('admin_login_title')}</h2></div><form id="adminLoginForm"><div class="form-group"><label class="form-label">${t('email')}</label><input type="email" id="adminEmail" class="form-input" value="admin@tourdecontrole.cm" required></div><div class="form-group"><label class="form-label">Mot de passe</label><input type="password" id="adminPassword" class="form-input" value="admin123" required></div><button type="submit" class="btn btn-primary w-full">${t('login')}</button></form><div class="demo-info">Email: admin@tourdecontrole.cm<br>Mot de passe: admin123</div><div class="text-center mt-3"><a href="#" data-page="home" style="color:var(--gray-500);">← ${t('back_to_site')}</a></div></div></div>`;
+            attachPageLinks();
+            document.getElementById('adminLoginForm').addEventListener('submit', e => { e.preventDefault(); if(document.getElementById('adminEmail').value==='admin@tourdecontrole.cm' && document.getElementById('adminPassword').value==='admin123'){ appState.isAuthenticated=true; appState.user={email:'admin@tourdecontrole.cm',role:'admin',name:'Chef Moussa'}; showToast(t('connection_success')); setTimeout(()=>navigateTo('admin-dashboard'),500); } else showToast('Identifiants invalides','error'); });
+        }
+
+        function renderAdminDashboardPage() {
+            if(!appState.isAuthenticated){ navigateTo('admin-login'); return; }
+            document.getElementById('mainContent').innerHTML = `<div class="admin-dashboard"><div class="admin-sidebar" id="adminSidebar"><div class="admin-sidebar-header"><h3>TOUR <span>DE</span> CONTRÔLE</h3><p>${t('dashboard')}</p></div><div class="admin-user-info"><div class="admin-avatar">${appState.user?.name?.charAt(0)||'A'}</div><div class="admin-user-details"><div class="admin-user-name">${appState.user?.name||'Admin'}</div><div class="admin-user-role">Administrateur</div></div></div><ul class="admin-nav"><li class="admin-nav-item active" data-admin-page="overview"><i class="fas fa-chart-line"></i> ${t('overview')}</li><li class="admin-nav-item" data-admin-page="products"><i class="fas fa-box"></i> ${t('products')}</li><li class="admin-nav-item" data-admin-page="orders"><i class="fas fa-shopping-cart"></i> ${t('orders')}</li><li class="admin-nav-item" data-admin-page="students"><i class="fas fa-users"></i> ${t('students')}</li><li class="admin-nav-item" data-admin-page="contacts"><i class="fas fa-envelope"></i> ${t('messages')}</li><li class="admin-nav-item" data-admin-page="settings"><i class="fas fa-cog"></i> ${t('settings')}</li><div class="admin-nav-divider"></div><li class="admin-nav-item" onclick="logout()"><i class="fas fa-sign-out-alt"></i> ${t('logout')}</li></ul></div><div class="admin-main" id="adminContent">${renderAdminOverview()}</div></div>`;
+            setupAdminNav(); initCharts();
+        }
+
+        function setupAdminNav() {
+            document.querySelectorAll('[data-admin-page]').forEach(item => item.addEventListener('click', function(){ document.querySelectorAll('[data-admin-page]').forEach(i=>i.classList.remove('active')); this.classList.add('active'); appState.adminActivePage=this.dataset.adminPage; const c=document.getElementById('adminContent'); switch(this.dataset.adminPage){ case 'overview':c.innerHTML=renderAdminOverview();initCharts();break; case 'products':c.innerHTML=renderAdminProducts();break; case 'orders':c.innerHTML=renderAdminOrders();break; case 'students':c.innerHTML=renderAdminStudents();break; case 'contacts':c.innerHTML=renderAdminContacts();break; case 'settings':c.innerHTML=renderAdminSettings();break; } }));
+            document.getElementById('adminMobileToggle')?.addEventListener('click',()=>document.getElementById('adminSidebar').classList.toggle('active'));
+        }
+
+        function renderAdminOverview() {
+            const rev = appState.orders.reduce((s,o)=>s+o.amount,0);
+            return `<div class="admin-section"><div class="admin-header"><h2 class="admin-header-title">${t('overview')}</h2></div><div class="admin-stats"><div class="stat-card"><div class="stat-value">${appState.orders.length}</div><div class="stat-label">${t('total_orders')}</div></div><div class="stat-card"><div class="stat-value">${(rev/1000000).toFixed(1)}M</div><div class="stat-label">${t('revenue')}</div></div><div class="stat-card"><div class="stat-value">${appState.students.length}</div><div class="stat-label">${t('active_students')}</div></div><div class="stat-card"><div class="stat-value">${appState.products.length}</div><div class="stat-label">${t('products_count')}</div></div></div><div class="admin-charts"><div class="chart-card"><div class="chart-title">Ventes</div><div class="chart-container"><canvas id="salesChart"></canvas></div></div><div class="chart-card"><div class="chart-title">Catégories</div><div class="chart-container"><canvas id="categoryChart"></canvas></div></div></div><div class="admin-table-container"><div class="table-header"><h3 class="table-title">${t('recent_orders')}</h3></div><table class="admin-table"><thead><tr><th>${t('client')}</th><th>${t('product')}</th><th>${t('amount')}</th><th>${t('status')}</th></tr></thead><tbody>${appState.orders.slice(0,5).map(o=>`<tr><td>${o.client}</td><td>${o.product}</td><td>${formatPrice(o.amount)}</td><td><span class="status-badge status-${getStatusClass(o.status)}">${o.status}</span></td></tr>`).join('')}</tbody></table></div></div>`;
+        }
+
+        function renderAdminProducts() {
+            return `<div class="admin-section"><div class="admin-header"><h2 class="admin-header-title">${t('product_management')}</h2><div class="admin-header-actions"><div class="search-bar"><i class="fas fa-search"></i><input type="text" placeholder="${t('search')}" id="productSearch" oninput="filterAdminProducts()"></div><button class="btn btn-primary btn-sm" onclick="openAddProductModal()"><i class="fas fa-plus"></i> ${t('add_product')}</button></div></div><div class="admin-table-container"><table class="admin-table"><thead><tr><th>${t('image')}</th><th>${t('name')}</th><th>${t('category')}</th><th>${t('price')}</th><th>${t('stock')}</th><th>${t('actions')}</th></tr></thead><tbody id="adminProductsTable">${appState.products.map(p=>`<tr><td><img src="${p.image}" style="width:45px;height:45px;object-fit:cover;border-radius:6px;cursor:pointer" onclick="openImagePreview('${p.image}')"></td><td>${p.name}</td><td>${p.categoryName}</td><td>${formatPrice(p.price)}</td><td><span class="status-badge ${p.stock==='En stock'?'status-success':'status-warning'}">${p.stock}</span></td><td><div class="action-buttons"><button class="action-btn view" onclick="viewProduct(${p.id})"><i class="fas fa-eye"></i></button><button class="action-btn edit" onclick="editProduct(${p.id})"><i class="fas fa-edit"></i></button><button class="action-btn delete" onclick="deleteProduct(${p.id})"><i class="fas fa-trash"></i></button></div></td></tr>`).join('')}</tbody></table></div></div>`;
+        }
+
+        function renderAdminOrders() {
+            return `<div class="admin-section"><div class="admin-header"><h2 class="admin-header-title">${t('order_management')}</h2><select class="form-select" onchange="filterAdminOrders(this.value)" style="width:auto;padding:0.4rem;"><option value="all">${t('all')}</option><option value="En cours">${t('in_progress')||'En cours'}</option><option value="Confirmé">${t('confirmed')||'Confirmé'}</option><option value="Livré">${t('delivered')||'Livré'}</option></select></div><div class="admin-table-container"><table class="admin-table"><thead><tr><th>ID</th><th>${t('client')}</th><th>${t('product')}</th><th>${t('amount')}</th><th>${t('status')}</th><th>${t('actions')}</th></tr></thead><tbody id="adminOrdersTable">${appState.orders.map(o=>`<tr><td>#${o.id}</td><td>${o.client}</td><td>${o.product}</td><td>${formatPrice(o.amount)}</td><td><select class="form-select" style="padding:0.2rem;font-size:0.75rem;" onchange="updateOrderStatus(${o.id},this.value)"><option value="En attente" ${o.status==='En attente'?'selected':''}>En attente</option><option value="Confirmé" ${o.status==='Confirmé'?'selected':''}>Confirmé</option><option value="En cours" ${o.status==='En cours'?'selected':''}>En cours</option><option value="Livré" ${o.status==='Livré'?'selected':''}>Livré</option></select></td><td><div class="action-buttons"><button class="action-btn view" onclick="viewOrder(${o.id})"><i class="fas fa-eye"></i></button><button class="action-btn delete" onclick="deleteOrder(${o.id})"><i class="fas fa-trash"></i></button></div></td></tr>`).join('')}</tbody></table></div></div>`;
+        }
+
+        function renderAdminStudents() {
+            return `<div class="admin-section"><div class="admin-header"><h2 class="admin-header-title">${t('students')}</h2></div><div class="admin-table-container"><table class="admin-table"><thead><tr><th>ID</th><th>${t('name')}</th><th>Formation</th><th>${t('date')}</th><th>${t('status')}</th></tr></thead><tbody>${appState.students.map(s=>`<tr><td>#${s.id}</td><td>${s.name}</td><td>${s.formation}</td><td>${s.date}</td><td><span class="status-badge ${s.status==='Confirmé'?'status-success':'status-warning'}">${s.status}</span></td></tr>`).join('')}</tbody></table></div></div>`;
+        }
+
+        function renderAdminContacts() {
+            return `<div class="admin-section"><div class="admin-header"><h2 class="admin-header-title">${t('messages')}</h2></div><div class="admin-table-container"><table class="admin-table"><thead><tr><th>ID</th><th>${t('name')}</th><th>${t('email')}</th><th>${t('message')}</th><th>${t('date')}</th><th>${t('status')}</th><th>${t('actions')}</th></tr></thead><tbody>${appState.contacts.map(c=>`<tr><td>#${c.id}</td><td>${c.name}</td><td>${c.email}</td><td>${c.message?.substring(0,40)}...</td><td>${c.date}</td><td><span class="status-badge ${c.status==='Non lu'?'status-warning':'status-success'}">${c.status}</span></td><td><div class="action-buttons"><button class="action-btn view" onclick="viewMessage(${c.id})"><i class="fas fa-eye"></i></button><button class="action-btn delete" onclick="deleteContact(${c.id})"><i class="fas fa-trash"></i></button></div></td></tr>`).join('')}</tbody></table></div></div>`;
+        }
+
+        function renderAdminSettings() {
+            return `<div class="admin-section"><div class="admin-header"><h2 class="admin-header-title">${t('settings')}</h2></div><div class="admin-table-container"><h3 class="mb-3">Boutique</h3><form id="settingsForm"><div class="form-group"><label class="form-label">Nom</label><input type="text" class="form-input" value="TOUR DE CONTRÔLE"></div><div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" value="contact@tourdecontrole.cm"></div><button type="submit" class="btn btn-primary">${t('save')}</button></form></div></div>`;
+        }
+
+        function initCharts() {
+            const sc=document.getElementById('salesChart'); if(sc) new Chart(sc.getContext('2d'),{type:'line',data:{labels:['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'],datasets:[{data:[120,150,180,140,220,280,250],borderColor:'#ff9b8a',backgroundColor:'rgba(255,155,138,0.1)',tension:0.4,fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}}});
+            const cc=document.getElementById('categoryChart'); if(cc) new Chart(cc.getContext('2d'),{type:'doughnut',data:{labels:[t('category_birthday'),t('category_wedding'),t('category_fresh'),t('category_dry')],datasets:[{data:[35,25,20,20],backgroundColor:['#ff9b8a','#e88372','#d46b5a','#bf5343']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom'}}}});
+        }
+
+        window.openAddProductModal = function() {
+            document.getElementById('productModalTitle').textContent = t('add_product');
+            document.getElementById('productId').value = '';
+            ['productName','productPrice','productImage','productDescription'].forEach(id=>document.getElementById(id).value='');
+            document.getElementById('productCategory').value='birthday';
+            document.getElementById('productStock').value='En stock';
+            document.getElementById('imagePreviewThumb').style.display='none';
+            uploadedImageData = null;
+            openModal('productModal');
+        };
+        window.editProduct = function(id) {
+            const p=appState.products.find(x=>x.id===id); if(!p) return;
+            document.getElementById('productModalTitle').textContent = t('edit') + ' ' + p.name;
+            document.getElementById('productId').value=p.id;
+            document.getElementById('productName').value=p.name;
+            document.getElementById('productCategory').value=p.category;
+            document.getElementById('productPrice').value=p.price;
+            document.getElementById('productStock').value=p.stock;
+            document.getElementById('productImage').value=p.image;
+            document.getElementById('productDescription').value=p.description||'';
+            if(p.image){ document.getElementById('imagePreviewThumb').src=p.image; document.getElementById('imagePreviewThumb').style.display='block'; }
+            openModal('productModal');
+        };
+        window.deleteProduct = function(id) { document.getElementById('deleteItemId').value=id; document.getElementById('deleteItemType').value='product'; openModal('deleteModal'); };
+        window.viewProduct = function(id) { const p=appState.products.find(x=>x.id===id); if(p) showToast(`${p.name} - ${formatPrice(p.price)}`); };
+        window.viewOrder = function(id) { const o=appState.orders.find(x=>x.id===id); if(o){ document.getElementById('orderDetailsContent').innerHTML=`<p><strong>Client:</strong> ${o.client}</p><p><strong>Produit:</strong> ${o.product}</p><p><strong>Montant:</strong> ${formatPrice(o.amount)}</p><p><strong>Statut:</strong> ${o.status}</p>`; openModal('orderDetailsModal'); } };
+        window.updateOrderStatus = function(id,status) { const o=appState.orders.find(x=>x.id===id); if(o){ o.status=status; saveData(); showToast(t('status_updated')); } };
+        window.deleteOrder = function(id) { document.getElementById('deleteItemId').value=id; document.getElementById('deleteItemType').value='order'; openModal('deleteModal'); };
+        window.viewMessage = function(id) { const c=appState.contacts.find(x=>x.id===id); if(c){ c.status='Lu'; saveData(); document.getElementById('messageContent').innerHTML=`<p><strong>De:</strong> ${c.name}</p><p><strong>Email:</strong> ${c.email}</p><p><strong>Message:</strong> ${c.message}</p>`; openModal('messageModal'); if(appState.adminActivePage==='contacts') document.getElementById('adminContent').innerHTML=renderAdminContacts(); } };
+        window.deleteContact = function(id) { document.getElementById('deleteItemId').value=id; document.getElementById('deleteItemType').value='contact'; openModal('deleteModal'); };
+        window.confirmDelete = function() {
+            const id=parseInt(document.getElementById('deleteItemId').value), type=document.getElementById('deleteItemType').value;
+            if(type==='product'){ appState.products=appState.products.filter(p=>p.id!==id); showToast(t('product_deleted')); }
+            else if(type==='order'){ appState.orders=appState.orders.filter(o=>o.id!==id); showToast(t('order_deleted')); }
+            else if(type==='contact'){ appState.contacts=appState.contacts.filter(c=>c.id!==id); showToast(t('message_deleted')); }
+            saveData(); closeModal('deleteModal');
+            if(appState.currentPage==='admin-dashboard'){ const c=document.getElementById('adminContent'); switch(appState.adminActivePage){ case 'overview':c.innerHTML=renderAdminOverview();initCharts();break; case 'products':c.innerHTML=renderAdminProducts();break; case 'orders':c.innerHTML=renderAdminOrders();break; case 'contacts':c.innerHTML=renderAdminContacts();break; } }
+            if(['home','products'].includes(appState.currentPage)) navigateTo(appState.currentPage);
+        };
+        window.filterAdminProducts = function() {
+            const q=document.getElementById('productSearch')?.value?.toLowerCase()||'';
+            document.getElementById('adminProductsTable').innerHTML = appState.products.filter(p=>p.name.toLowerCase().includes(q)||p.categoryName.toLowerCase().includes(q)).map(p=>`<tr><td><img src="${p.image}" style="width:45px;height:45px;object-fit:cover;border-radius:6px;cursor:pointer" onclick="openImagePreview('${p.image}')"></td><td>${p.name}</td><td>${p.categoryName}</td><td>${formatPrice(p.price)}</td><td><span class="status-badge ${p.stock==='En stock'?'status-success':'status-warning'}">${p.stock}</span></td><td><div class="action-buttons"><button class="action-btn view" onclick="viewProduct(${p.id})"><i class="fas fa-eye"></i></button><button class="action-btn edit" onclick="editProduct(${p.id})"><i class="fas fa-edit"></i></button><button class="action-btn delete" onclick="deleteProduct(${p.id})"><i class="fas fa-trash"></i></button></div></td></tr>`).join('');
+        };
+        window.filterAdminOrders = function(status) { const filtered=status==='all'?appState.orders:appState.orders.filter(o=>o.status===status); document.getElementById('adminOrdersTable').innerHTML=filtered.map(o=>`<tr><td>#${o.id}</td><td>${o.client}</td><td>${o.product}</td><td>${formatPrice(o.amount)}</td><td><select class="form-select" style="padding:0.2rem;font-size:0.75rem;" onchange="updateOrderStatus(${o.id},this.value)"><option value="En attente" ${o.status==='En attente'?'selected':''}>En attente</option><option value="Confirmé" ${o.status==='Confirmé'?'selected':''}>Confirmé</option><option value="En cours" ${o.status==='En cours'?'selected':''}>En cours</option><option value="Livré" ${o.status==='Livré'?'selected':''}>Livré</option></select></td><td><div class="action-buttons"><button class="action-btn view" onclick="viewOrder(${o.id})"><i class="fas fa-eye"></i></button><button class="action-btn delete" onclick="deleteOrder(${o.id})"><i class="fas fa-trash"></i></button></div></td></tr>`).join(''); };
+
+        window.bookTraining = function(name) { document.getElementById('trainingName').value=name; openModal('bookingModal'); };
+        window.closeModal = closeModal; window.showToast = showToast; window.logout = logout;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateUILanguage(); renderHomePage();
+            const mobileMenuBtn=document.getElementById('mobileMenuBtn'), mobileMenu=document.getElementById('mobileMenu'); let isMenuOpen=false;
+            mobileMenuBtn?.addEventListener('click',()=>{ isMenuOpen=!isMenuOpen; mobileMenu.classList.toggle('active'); mobileMenuBtn.querySelector('i').className=isMenuOpen?'fas fa-times':'fas fa-bars'; });
+            document.querySelectorAll('.lang-btn,.mobile-lang-btn').forEach(btn=>btn.addEventListener('click',function(){ document.querySelectorAll('.lang-btn,.mobile-lang-btn').forEach(b=>b.classList.remove('active')); document.querySelectorAll(`.lang-btn[data-lang="${this.dataset.lang}"],.mobile-lang-btn[data-lang="${this.dataset.lang}"]`).forEach(b=>b.classList.add('active')); appState.language=this.dataset.lang; updateUILanguage(); }));
+            document.getElementById('bookingForm')?.addEventListener('submit',e=>{ e.preventDefault(); closeModal('bookingModal'); showToast('Réservation confirmée !'); e.target.reset(); });
+            document.getElementById('productForm')?.addEventListener('submit', e => {
+                e.preventDefault();
+                const imgValue = document.getElementById('productImage').value || uploadedImageData || 'https://images.pexels.com/photos/1854652/pexels-photo-1854652.jpeg?auto=compress&cs=tinysrgb&w=400';
+                const data = { name:document.getElementById('productName').value, category:document.getElementById('productCategory').value, categoryName:getCategoryName(document.getElementById('productCategory').value), price:parseInt(document.getElementById('productPrice').value), stock:document.getElementById('productStock').value, image:imgValue, description:document.getElementById('productDescription').value };
+                const id=document.getElementById('productId').value;
+                if(id){ const idx=appState.products.findIndex(p=>p.id===parseInt(id)); if(idx!==-1) appState.products[idx]={...appState.products[idx],...data}; showToast(t('product_updated')); }
+                else { data.id=Math.max(...appState.products.map(p=>p.id),0)+1; appState.products.push(data); showToast(t('product_added')); }
+                saveData(); closeModal('productModal');
+                if(appState.adminActivePage==='products') document.getElementById('adminContent').innerHTML=renderAdminProducts();
+                if(['home','products'].includes(appState.currentPage)) navigateTo(appState.currentPage);
+            });
+            document.getElementById('settingsForm')?.addEventListener('submit',e=>{ e.preventDefault(); showToast('Paramètres enregistrés'); });
+            document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{ if(e.target===m) m.classList.remove('active'); }));
+            window.addEventListener('scroll',()=>document.getElementById('header').classList.toggle('scrolled',window.scrollY>100));
+            document.addEventListener('click',e=>{ const sidebar=document.getElementById('adminSidebar'), toggle=document.getElementById('adminMobileToggle'); if(sidebar?.classList.contains('active')&&!sidebar.contains(e.target)&&!toggle?.contains(e.target)) sidebar.classList.remove('active'); });
+        });
+    </script>
+</body>
+</html>
